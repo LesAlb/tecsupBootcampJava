@@ -1,0 +1,28 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: libros-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/librosdb
+    username: libros
+    password: libros123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+# servicio levantado se conecta a la base librosdb.
+# se registra en Eureka con el nombre libros-service.
+# aparece en el dashboard de Eureka en estado UP.

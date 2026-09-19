@@ -1,0 +1,28 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: notificaciones-service
+  datasource:
+    url: jdbc:postgresql://localhost:5434/notificacionesdb
+    username: notif
+    password: notif123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+
+
+# levanta servicio, se conecta bd notificacionesdb.
+# se registra en eureka con nombre notificaciones-service.
+# aparece en dashboard Eureka en estado UP.
+# recibe llamadas desde prestamos-service y simula envio de notificaciones.

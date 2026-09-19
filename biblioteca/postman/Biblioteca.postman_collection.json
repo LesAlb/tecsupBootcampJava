@@ -1,0 +1,88 @@
+{
+  "info": {
+    "name": "Biblioteca",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Colección basada en el flujo de prueba obligatorio (sección 8 del examen). Usa la variable {{gateway}} apuntando al Gateway del docente durante la sustentación, o a cada servicio directo (localhost:8081/8082/8083) mientras pruebas en local."
+  },
+  "variable": [
+    { "key": "gateway", "value": "http://localhost:8081" },
+    { "key": "prestamos_url", "value": "http://localhost:8082" },
+    { "key": "notificaciones_url", "value": "http://localhost:8083" }
+  ],
+  "item": [
+    {
+      "name": "1. GET libros (sembrados)",
+      "request": { "method": "GET", "url": "{{gateway}}/api/v1/libros" }
+    },
+    {
+      "name": "2. GET socios (sembrados)",
+      "request": { "method": "GET", "url": "{{gateway}}/api/v1/socios" }
+    },
+    {
+      "name": "3. POST prestamo - camino exitoso (BIB0001 + S001)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{prestamos_url}}/api/v1/prestamos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigoEjemplar\": \"BIB0001\",\n  \"codigoSocio\": \"S001\",\n  \"dias\": 7\n}"
+        }
+      }
+    },
+    {
+      "name": "4. POST prestamo repetido - mismo ejemplar, otro socio (RECHAZADA No disponible)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{prestamos_url}}/api/v1/prestamos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigoEjemplar\": \"BIB0001\",\n  \"codigoSocio\": \"S002\",\n  \"dias\": 7\n}"
+        }
+      }
+    },
+    {
+      "name": "5. POST prestamo con socio inactivo (RECHAZADA Socio inactivo)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{prestamos_url}}/api/v1/prestamos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigoEjemplar\": \"BIB0002\",\n  \"codigoSocio\": \"S002\",\n  \"dias\": 7\n}"
+        }
+      }
+    },
+    {
+      "name": "6. POST prestamo con ejemplar inexistente (RECHAZADA Ejemplar no existe)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{prestamos_url}}/api/v1/prestamos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigoEjemplar\": \"BIB9999\",\n  \"codigoSocio\": \"S001\",\n  \"dias\": 7\n}"
+        }
+      }
+    },
+    {
+      "name": "7. POST devolucion del prestamo del paso 3 (usar el id devuelto)",
+      "request": {
+        "method": "POST",
+        "url": "{{prestamos_url}}/api/v1/prestamos/1/devolucion"
+      }
+    },
+    {
+      "name": "8. POST devolucion repetida sobre el mismo prestamo (debe rechazarse, 409)",
+      "request": {
+        "method": "POST",
+        "url": "{{prestamos_url}}/api/v1/prestamos/1/devolucion"
+      }
+    },
+    {
+      "name": "9. GET notificaciones (debe listar la del paso 3)",
+      "request": { "method": "GET", "url": "{{notificaciones_url}}/api/v1/notificaciones" }
+    }
+  ]
+}

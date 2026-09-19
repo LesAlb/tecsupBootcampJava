@@ -1,0 +1,27 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: prestamos-service
+  datasource:
+    url: jdbc:postgresql://localhost:5433/prestamosdb
+    username: prestamos
+    password: prestamos123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+
+#  levanta servicio y se conecta a la base prestamosdb.
+# se registra en Eureka con el nombre prestamos-service.
+# aparece en el dashboard de Eureka en estado UP.
+# podrá hacer llamadas a libros-service y notificaciones-service.

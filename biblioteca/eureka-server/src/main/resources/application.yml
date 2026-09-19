@@ -1,0 +1,17 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: eureka-server
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    enable-self-preservation: false
+
+    # levantar este servicio y entrar a http://localhost:8761
+    # dashboard de Eureka vacio al inicio.
+    # cuando se registra los demás servicios, aparecen listados con estado UP.
